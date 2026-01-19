@@ -7,6 +7,9 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col, avg, max, min, count
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType
 
+# Configuración de versión del conector Spark-Kafka
+SPARK_KAFKA_PACKAGE = "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0"
+
 class SparkBatchProcessor:
     def __init__(self, app_name="DEPIA_Spark_Batch"):
         """
@@ -17,8 +20,7 @@ class SparkBatchProcessor:
         """
         self.spark = SparkSession.builder \
             .appName(app_name) \
-            .config("spark.jars.packages", 
-                   "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0") \
+            .config("spark.jars.packages", SPARK_KAFKA_PACKAGE) \
             .getOrCreate()
         
         self.spark.sparkContext.setLogLevel("WARN")

@@ -38,15 +38,18 @@ def check_java():
 def check_dependencies():
     """Verifica que las dependencias de Python estén instaladas"""
     print("\n✓ Verificando dependencias de Python...")
-    dependencies = ['pyspark', 'kafka']
+    dependencies = [
+        ('pyspark', 'pyspark'),
+        ('kafka-python', 'kafka')
+    ]
     
     all_ok = True
-    for dep in dependencies:
+    for display_name, module_name in dependencies:
         try:
-            __import__(dep)
-            print(f"  ✓ {dep} - OK")
+            __import__(module_name)
+            print(f"  ✓ {display_name} - OK")
         except ImportError:
-            print(f"  ✗ {dep} - NO INSTALADO")
+            print(f"  ✗ {display_name} - NO INSTALADO")
             all_ok = False
     
     return all_ok
@@ -63,7 +66,7 @@ def check_code_syntax():
     all_ok = True
     for file in files:
         try:
-            result = subprocess.run(['python3', '-m', 'py_compile', file],
+            result = subprocess.run([sys.executable, '-m', 'py_compile', file],
                                   capture_output=True, timeout=5)
             if result.returncode == 0:
                 print(f"  ✓ {file} - OK")
